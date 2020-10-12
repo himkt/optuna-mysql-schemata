@@ -1,0 +1,76 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "alembic_version", primary_key: "version_num", id: :string, limit: 32, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+end
+
+create_table "studies", primary_key: "study_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.string "study_name", limit: 512, null: false
+  t.column "direction", "enum('NOT_SET','MINIMIZE','MAXIMIZE')", null: false
+  t.index ["study_name"], name: "ix_studies_study_name", unique: true
+end
+
+create_table "study_system_attributes", primary_key: "study_system_attribute_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "study_id"
+  t.string "key", limit: 512
+  t.string "value_json", limit: 2048
+  t.index ["study_id", "key"], name: "study_id", unique: true
+end
+
+create_table "study_user_attributes", primary_key: "study_user_attribute_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "study_id"
+  t.string "key", limit: 512
+  t.string "value_json", limit: 2048
+  t.index ["study_id", "key"], name: "study_id", unique: true
+end
+
+create_table "trial_params", primary_key: "param_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "trial_id"
+  t.string "param_name", limit: 512
+  t.float "param_value"
+  t.string "distribution_json", limit: 2048
+  t.index ["trial_id", "param_name"], name: "trial_id", unique: true
+end
+
+create_table "trial_system_attributes", primary_key: "trial_system_attribute_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "trial_id"
+  t.string "key", limit: 512
+  t.string "value_json", limit: 2048
+  t.index ["trial_id", "key"], name: "trial_id", unique: true
+end
+
+create_table "trial_user_attributes", primary_key: "trial_user_attribute_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "trial_id"
+  t.string "key", limit: 512
+  t.string "value_json", limit: 2048
+  t.index ["trial_id", "key"], name: "trial_id", unique: true
+end
+
+create_table "trial_values", primary_key: "trial_value_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "trial_id"
+  t.integer "step"
+  t.float "value"
+  t.index ["trial_id", "step"], name: "trial_id", unique: true
+end
+
+create_table "trials", primary_key: "trial_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "number"
+  t.integer "study_id"
+  t.column "state", "enum('RUNNING','COMPLETE','PRUNED','FAIL','WAITING')", null: false
+  t.float "value"
+  t.datetime "datetime_start"
+  t.datetime "datetime_complete"
+  t.index ["study_id"], name: "study_id"
+end
+
+create_table "version_info", primary_key: "version_info_id", id: :integer, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "schema_version"
+  t.string "library_version", limit: 256
+end
+
+add_foreign_key "study_system_attributes", "studies", primary_key: "study_id", name: "study_system_attributes_ibfk_1"
+add_foreign_key "study_user_attributes", "studies", primary_key: "study_id", name: "study_user_attributes_ibfk_1"
+add_foreign_key "trial_params", "trials", primary_key: "trial_id", name: "trial_params_ibfk_1"
+add_foreign_key "trial_system_attributes", "trials", primary_key: "trial_id", name: "trial_system_attributes_ibfk_1"
+add_foreign_key "trial_user_attributes", "trials", primary_key: "trial_id", name: "trial_user_attributes_ibfk_1"
+add_foreign_key "trial_values", "trials", primary_key: "trial_id", name: "trial_values_ibfk_1"
+add_foreign_key "trials", "studies", primary_key: "study_id", name: "trials_ibfk_1"
