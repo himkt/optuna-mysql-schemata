@@ -1,0 +1,26 @@
+#!/bin/sh
+
+export TABLE_NAME=${TABLE_NAME:-test}
+export USER_NAME=${USER_NAME:-root}
+
+
+echo studies.sql
+mysql -u $USER_NAME $TABLE_NAME < studies.sql
+
+
+echo trials.sql
+mysql -u $USER_NAME $TABLE_NAME < trials.sql
+
+
+for sql in `ls *.sql`; do
+  if [ $sql = "trials.sql" ]; then
+    continue
+  fi
+
+  if [ $sql = "studies.sql" ]; then
+    continue
+  fi
+
+  echo $sql
+  mysql -u $USER_NAME $TABLE_NAME < $sql
+done
