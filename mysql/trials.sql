@@ -2,7 +2,7 @@ create table `trials` (
   `trial_id` int(11) not null auto_increment,
   `number` int(11) default null,
   `study_id` int(11) default null,
-  `state` enum('running','complete','pruned','fail','waiting') not null,
+  `state` enum('RUNNING','COMPLETE','PRUNED','FAIL','WAITING') not null,
   `value` float default null,
   `datetime_start` datetime default null,
   `datetime_complete` datetime default null,

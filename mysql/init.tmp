@@ -1,0 +1,2 @@
+insert into version_info(version_info_id, schema_version, library_version) values(1, 12, '2.2.0');
+insert into alembic_version(version_num) values('v1.3.0.a');
