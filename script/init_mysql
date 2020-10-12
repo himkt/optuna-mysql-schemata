@@ -1,15 +1,15 @@
 #!/bin/sh
 
-export TABLE_NAME=${TABLE_NAME:-test}
+export DATABASE_NAME=${DATABASE_NAME:-test}
 export USER_NAME=${USER_NAME:-root}
 
 
 echo studies.sql
-mysql -u $USER_NAME $TABLE_NAME < studies.sql
+mysql -u $USER_NAME $DATABASE_NAME < studies.sql
 
 
 echo trials.sql
-mysql -u $USER_NAME $TABLE_NAME < trials.sql
+mysql -u $USER_NAME $DATABASE_NAME < trials.sql
 
 
 for sql in `ls *.sql`; do
@@ -22,5 +22,5 @@ for sql in `ls *.sql`; do
   fi
 
   echo $sql
-  mysql -u $USER_NAME $TABLE_NAME < $sql
+  mysql -u $USER_NAME $DATABASE_NAME < $sql
 done
